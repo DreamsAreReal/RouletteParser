@@ -10,7 +10,10 @@ namespace RoulletteParser.MelBet.Wrapper
         {
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             _httpClient = new HttpClient(httpClientHandler);
+        }
 
+        public void Authorization(string login, string password)
+        {
 
         }
     }
