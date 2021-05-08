@@ -10,13 +10,53 @@ namespace RouletteParser.RuCaptcha
     {
         private readonly TwoCaptcha.TwoCaptcha _solver;
 
-        public Api(string token)
+        private static Api _instance;
+
+        private string _token;
+
+        public static Api GetInstance()
         {
-            _solver = new TwoCaptcha.TwoCaptcha(token);
+            if (_instance != null)
+            {
+                _instance = new Api();
+            }
+
+            return _instance;
         }
 
-        public async Task<string> SolveRecapthcaV2(string siteKey, string url)
+        /// <summary>
+        /// Set rucaptcha token
+        /// </summary>
+        /// <param name="token">Token for API</param>
+        public void SetToken(string token)
         {
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new ArgumentException($"Token not must be null");
+            }
+            _token = token;
+        }
+
+        
+
+        /// <summary>
+        /// This method solve recapcha v2.
+        /// </summary>
+        /// <param name="siteKey">Sitekey from site. Is const</param>
+        /// <param name="url">Url from site, where locate captcha</param>
+        /// <returns>Answer for captcha</returns>
+        public async Task<string> SolveRecaptchaV2(string siteKey, string url)
+        {
+            if (string.IsNullOrEmpty(siteKey))
+            {
+                throw new ArgumentException("Sitekey not must be null");
+            }
+
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentException("Url not must be null");
+            }
+
             ReCaptcha captcha = new ReCaptcha();
             captcha.SetSiteKey(siteKey);
             captcha.SetUrl(url);
