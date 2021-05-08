@@ -4,15 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TwoCaptcha.Captcha;
 
+
 namespace RouletteParser.RuCaptcha
 {
     public class Api
     {
-        private readonly TwoCaptcha.TwoCaptcha _solver;
+        private TwoCaptcha.TwoCaptcha _solver;
 
         private static Api _instance;
-
-        private string _token;
 
         public static Api GetInstance()
         {
@@ -34,7 +33,7 @@ namespace RouletteParser.RuCaptcha
             {
                 throw new ArgumentException($"Token not must be null");
             }
-            _token = token;
+            _solver = new TwoCaptcha.TwoCaptcha(token);
         }
 
         
@@ -55,6 +54,11 @@ namespace RouletteParser.RuCaptcha
             if (string.IsNullOrEmpty(url))
             {
                 throw new ArgumentException("Url not must be null");
+            }
+
+            if (_solver == null)
+            {
+                throw new Exception("Set apikey for api");
             }
 
             ReCaptcha captcha = new ReCaptcha();
