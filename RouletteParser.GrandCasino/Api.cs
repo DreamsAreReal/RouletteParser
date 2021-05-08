@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RouletteParser.Core;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -13,9 +14,10 @@ namespace RouletteParser.GrandCasino
 
         public Api()
         {
-            _client = new HttpClient();
-
-
+            HttpClientHandler handler = new HttpClientHandler();
+            _client = new HttpClient(handler.Configure()).Configure();
         }
+
+
     }
 }
