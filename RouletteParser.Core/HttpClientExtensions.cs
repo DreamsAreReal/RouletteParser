@@ -14,6 +14,7 @@ namespace RouletteParser.Core
 
         public static HttpClient Configure(this HttpClient client)
         {
+            
             client.DefaultRequestHeaders.Add(NameUserAgentHeader, RandomUa.RandomUserAgent);
             return client;
         }

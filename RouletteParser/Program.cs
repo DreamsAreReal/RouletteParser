@@ -17,34 +17,28 @@ namespace RouletteParser
     {
         static async Task Main(string[] args)
         {
-            RuCaptcha.Api.GetInstance().SetToken(Settings.ApiKey);
 
+            await new Startup().Start();
 
-            GrandCasino.Api grandCasinoApi = new GrandCasino.Api();
-            await grandCasinoApi.Authorization("gsdgsg.guigui@bk.ru", "фиуиуя723");
-            var url = await grandCasinoApi.GetLiveDealerUrl();
-            LiveDealer.Api liveDealerApi = new LiveDealer.Api(grandCasinoApi.Client);
-            await liveDealerApi.Authorization(url);
-            var data = await liveDealerApi.GetAccessSessionData();
-            LiveDealer.WebsocketListener websocketListener = new LiveDealer.WebsocketListener(data);
-            await websocketListener.Receive(OnMessageReceived);
-
-            Console.WriteLine("Enter \"exit\" for exit");
-            while (true)
+            
+            await Task.Run(()  =>
             {
-                var input = Console.ReadLine();
-                if (input == "exit")
+                Console.WriteLine("Enter \"exit\" for exit");
+                while (true)
                 {
-                    break;
+                    var input = Console.ReadLine();
+                    if (input == "exit")
+                    {
+                        break;
+                    }
                 }
-            }
+            });
+
+
 
         }
 
-        static void OnMessageReceived(string text)
-        {
-            Console.WriteLine(text);
-        }
+        
 
         
     }

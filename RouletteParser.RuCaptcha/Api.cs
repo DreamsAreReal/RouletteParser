@@ -5,36 +5,23 @@ using System.Threading.Tasks;
 using TwoCaptcha.Captcha;
 
 
+
 namespace RouletteParser.RuCaptcha
 {
     public class Api
     {
-        private TwoCaptcha.TwoCaptcha _solver;
+        private readonly TwoCaptcha.TwoCaptcha _solver;
 
-        private static Api _instance;
+     
 
-        public static Api GetInstance()
+        private const string ApiKey = "1577500a6b0e34f93319c74a90fd8a09";
+
+        public Api()
         {
-            if (_instance == null)
-            {
-                _instance = new Api();
-            }
-
-            return _instance;
+            _solver = new TwoCaptcha.TwoCaptcha(ApiKey);
         }
 
-        /// <summary>
-        /// Set rucaptcha token
-        /// </summary>
-        /// <param name="token">Token for API</param>
-        public void SetToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-            {
-                throw new ArgumentException($"Token not must be null");
-            }
-            _solver = new TwoCaptcha.TwoCaptcha(token);
-        }
+       
 
         
 
