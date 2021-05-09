@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using RouletteParser.Core;
@@ -8,7 +9,7 @@ using Websocket.Client;
 
 namespace RouletteParser.LiveDealer
 {
-    public class WebsocketListener
+    public class WebsocketListener : IDisposable
     {
         private readonly WebsocketClient _client;
         private const int InstanceIdLength = 5;
@@ -29,5 +30,10 @@ namespace RouletteParser.LiveDealer
             await _client.Start();
         }
 
+        public void Dispose()
+        {
+            _client.Stop(WebSocketCloseStatus.Empty,string.Empty);
+            _client?.Dispose();
+        }
     }
 }

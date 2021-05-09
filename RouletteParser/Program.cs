@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RouletteParser.GrandCasino;
+using RouletteParser.LiveDealer;
 using RouletteParser.RuCaptcha;
 using Websocket.Client;
 
@@ -25,19 +26,26 @@ namespace RouletteParser
             LiveDealer.Api liveDealerApi = new LiveDealer.Api(grandCasinoApi.Client);
             await liveDealerApi.Authorization(url);
             var data = await liveDealerApi.GetAccessSessionData();
+            LiveDealer.WebsocketListener websocketListener = new LiveDealer.WebsocketListener(data);
+            await websocketListener.Receive(OnMessageReceived);
 
-            return;
+            Console.WriteLine("Enter \"exit\" for exit");
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (input == "exit")
+                {
+                    break;
+                }
+            }
 
-            
         }
 
-        static string GetRandomPassword(string ch, int pwdLength)
+        static void OnMessageReceived(string text)
         {
-            Random rndGen = new Random();
-            char[] pwd = new char[pwdLength];
-            for (int i = 0; i < pwd.Length; i++)
-                pwd[i] = ch[rndGen.Next(ch.Length)];
-            return new string(pwd);
+            Console.WriteLine(text);
         }
+
+        
     }
 }
