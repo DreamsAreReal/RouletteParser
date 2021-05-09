@@ -72,6 +72,10 @@ namespace RouletteParser.GrandCasino
             });
         }
 
+        /// <summary>
+        /// Method get url for authorization on live dealer
+        /// </summary>
+        /// <returns>Url for authorization</returns>
         public async Task<string> GetLiveDealerUrl()
         {
             var data = new Dictionary<string, string>
