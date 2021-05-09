@@ -17,11 +17,7 @@ namespace RouletteParser
     {
         static async Task Main(string[] args)
         {
-
-            await new Startup().Start();
-
-            
-            await Task.Run(()  =>
+            new Thread((() =>
             {
                 Console.WriteLine("Enter \"exit\" for exit");
                 while (true)
@@ -31,8 +27,12 @@ namespace RouletteParser
                     {
                         break;
                     }
+
                 }
-            });
+            })).Start();
+
+            await new Startup().Start();
+
 
 
 

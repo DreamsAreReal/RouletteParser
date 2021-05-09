@@ -9,12 +9,18 @@ using RouletteParser.Core;
 
 namespace RouletteParser
 {
-    class Startup
+    class Startup : IDisposable
     {
         private readonly ServiceProvider _serviceProvider;
+        private const string Login = "gsdgsg.guigui@bk.ru";
+        private const string Password = "фиуиуя723";
+        private static Startup _instance;
 
         public Startup()
         {
+            _instance?.Dispose();
+            _instance = this;
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .Build();
@@ -23,26 +29,28 @@ namespace RouletteParser
 
         public async Task Start()
         {
+            AbstractCasinoApi casinoApi = _serviceProvider.GetService<AbstractCasinoApi>();
+            await casinoApi.Authorization(Login, Password);
+            var url = await casinoApi.GetLiveDealerUrl();
 
-
-                AbstractCasinoApi casinoApi = _serviceProvider.GetService<AbstractCasinoApi>();
-                await casinoApi.Authorization("gsdgsg.guigui@bk.ru", "фиуиуя723");
-                var url = await casinoApi.GetLiveDealerUrl();
-                LiveDealer.Api liveDealerApi = _serviceProvider.GetService<LiveDealer.Api>();
-                liveDealerApi.SetClient(casinoApi.Client);
-                await liveDealerApi.Authorization(url);
-                var data = await liveDealerApi.GetAccessSessionData();
-                LiveDealer.WebsocketListener websocketListener =
-                    _serviceProvider.GetService<LiveDealer.WebsocketListener>();
-                await websocketListener.Receive(Log, data);
+            LiveDealer.Api liveDealerApi = _serviceProvider.GetService<LiveDealer.Api>();
+            liveDealerApi?.SetClient(casinoApi.Client);
+            await liveDealerApi.Authorization(url);
+            var data = await liveDealerApi.GetAccessSessionData();
+            
+            LiveDealer.WebsocketListener websocketListener = 
+                _serviceProvider.GetService<LiveDealer.WebsocketListener>();
+            await websocketListener.Receive(_serviceProvider.GetService<Handler>().MessageReceived, data);
             
 
 
         }
 
-        private void Log(string text)
+        
+
+        public void Dispose()
         {
-            Console.WriteLine(text);
+            _serviceProvider.Dispose();
         }
     }
 }

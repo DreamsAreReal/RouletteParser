@@ -25,6 +25,7 @@ namespace RouletteParser
                 .AddSingleton<RuCaptcha.Api>()
                 .AddTransient<AbstractCasinoApi, GrandCasino.Api>()
                 .AddTransient<LiveDealer.Api>()
+                .AddSingleton<Handler>()
                 .AddTransient<LiveDealer.WebsocketListener>()
                 .BuildServiceProvider();
         }

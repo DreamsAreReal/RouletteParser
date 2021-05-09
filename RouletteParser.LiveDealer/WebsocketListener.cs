@@ -30,7 +30,9 @@ namespace RouletteParser.LiveDealer
                                                   $"&EVOSESSIONID={sessionData.SessionId}" +
                                                   $"&client_version={Routes.ClientId}"));
             _logger.LogDebug($"Websocket open for session {sessionData.SessionId}, user id {sessionData.UserId}");
+            
             _client.MessageReceived.Subscribe(msg => messageReceived(msg.Text));
+           
             await _client.Start();
         }
 
