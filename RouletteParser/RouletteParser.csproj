@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RouletteParser.GrandCasino\RouletteParser.GrandCasino.csproj" />
     <ProjectReference Include="..\RouletteParser.RuCaptcha\RouletteParser.RuCaptcha.csproj" />
   </ItemGroup>
 

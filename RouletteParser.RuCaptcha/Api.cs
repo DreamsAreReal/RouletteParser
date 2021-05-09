@@ -15,7 +15,7 @@ namespace RouletteParser.RuCaptcha
 
         public static Api GetInstance()
         {
-            if (_instance != null)
+            if (_instance == null)
             {
                 _instance = new Api();
             }

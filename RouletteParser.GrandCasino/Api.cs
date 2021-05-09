@@ -21,6 +21,12 @@ namespace RouletteParser.GrandCasino
 
         private const string AuthCookieName = "auth_code";
 
+        private const string GameCode = "evo_firstpersonroulettelobby";
+
+        private const string GameId = "5448";
+
+        private const string CurrencyId = "2";
+
         public Api()
         {
             HttpClientHandler handler = new HttpClientHandler();
@@ -52,6 +58,7 @@ namespace RouletteParser.GrandCasino
             var answer = await (await _client.PostAsync(Routes.Api,
                 new FormUrlEncodedContent(data))).Content.ReadAsStringAsync();
             var json = JsonConvert.DeserializeObject(answer) as JObject;
+
             if (string.IsNullOrEmpty(answer) || json?["code"] == null)
             {
                 throw new ApiCodeParseException($"Was receive: {answer}");
@@ -63,7 +70,31 @@ namespace RouletteParser.GrandCasino
                 Name = AuthCookieName,
                 Value = json["code"].ToString()
             });
+        }
 
+        public async Task<string> GetLiveDealerUrl()
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"form[method]", MethodsName.url.ToString()},
+                {"form[game_code]", GameCode},
+                {"form[game_id]", GameId},
+                {"form[currency]", CurrencyId}
+
+            };
+
+            var answer = await (await _client.PostAsync(Routes.Api,
+                new FormUrlEncodedContent(data))).Content.ReadAsStringAsync();
+
+            var json = JsonConvert.DeserializeObject(answer) as JObject;
+
+            if (string.IsNullOrEmpty(answer) || json?["url"] == null)
+            {
+                throw new UrlParseException($"Was receive: {answer}");
+            }
+
+
+            return json["url"].ToString();
         }
     }
 }
