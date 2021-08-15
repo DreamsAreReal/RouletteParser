@@ -12,8 +12,8 @@ namespace RouletteParser
     class Startup : IDisposable
     {
         private readonly ServiceProvider _serviceProvider;
-        private const string Login = "gsdgsg.guigui@bk.ru";
-        private const string Password = "фиуиуя723";
+        private const string Login = "";
+        private const string Password = "";
         private static Startup _instance;
 
         public Startup()
